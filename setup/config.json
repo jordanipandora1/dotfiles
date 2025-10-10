@@ -119,6 +119,18 @@
       "%USERPROFILE%/.config/yasb/styles.css"
     ],
     [
+      ".vscode/theme/screencast.css",
+      "%USERPROFILE%/.config/vscode/screencast.css"
+    ],
+    [
+      ".vscode/theme/styles.css",
+      "%USERPROFILE%/.config/vscode/styles.css"
+    ],
+    [
+      ".vscode/theme/script.js",
+      "%USERPROFILE%/.config/vscode/script.js"
+    ],
+    [
       ".vscode/snippets",
       "%APPDATA%/Code/User/snippets"
     ],
