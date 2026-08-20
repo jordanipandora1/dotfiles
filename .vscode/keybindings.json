@@ -1,0 +1,37 @@
+[
+  {
+    "key": "escape",
+    "command": "notifications.hideToasts",
+    "when": "notificationToastsVisible"
+  },
+  {
+    "key": "escape",
+    "command": "closeReferenceSearch",
+    "when": "referenceSearchVisible"
+  },
+  {
+    "key": "escape",
+    "command": "removeSecondaryCursors",
+    "when": "editorHasMultipleSelections && textInputFocus"
+  },
+  {
+    "key": "escape",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "auxiliaryBarFocus || panelFocus || sideBarFocus"
+  },
+  {
+    "key": "escape",
+    "command": "list.closeFind",
+    "when": "listFocus && treeFindOpen"
+  },
+  {
+    "key": "escape",
+    "command": "notifications.hideList",
+    "when": "notificationCenterVisible"
+  },
+  {
+    //"when": "isDevelopment",
+    "key": "ctrl+shift+i",
+    "command": "workbench.action.toggleDevTools"
+  }
+]
