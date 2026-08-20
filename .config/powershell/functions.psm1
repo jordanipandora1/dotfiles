@@ -9,12 +9,11 @@ function Test-App {
     }
 
     return (
-        (Get-Command $App -ErrorAction SilentlyContinue) -or
-        (Test-Path ([Environment]::ExpandEnvironmentVariables($App))) -or
-        (winget list --id $App)
+        [bool](Get-Command $App -ErrorAction SilentlyContinue) -or
+        (Test-Path ([Environment]::ExpandEnvironmentVariables($App)) -ErrorAction SilentlyContinue) -or
+        ($App.Contains('.') -and $(winget list --id $App --exact --accept-source-agreements 2>$null | Out-Null; $LASTEXITCODE -eq 0))
     )
 }
-
 
 function Link-Path {
     param (

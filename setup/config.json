@@ -19,12 +19,17 @@
         "scoop config aria2-warning-enabled false"
       ],
       [
+        "dark",
+        "main/dark"
+      ],
+      [
         "innounp",
         "main/innounp"
       ],
       [
-        "wix",
-        "main/wixtoolset"
+        "git",
+        "main/git",
+        "git config --global --replace-all credential.helper manager ; git config --global --add credential.helper \"cache --timeout=3600\" ; git config --global core.autocrlf false ; git config --global core.quotepath false ; git config --global core.compression 0 ; git config --global http.postBuffer 524288000 ; git config --global http.maxRequestBuffer 524 ; git config --global i18n.logoutputencoding utf-8 ; git config --global i18n.commit.encoding utf-8 ; git config --global i18n.commitencoding utf-8 ; git config --global gui.encoding utf-8 ; git config --global --add safe.directory '*'"
       ],
       [
         "komorebi",
@@ -44,6 +49,14 @@
   "winget": {
     "apps": [
       [
+        "pwsh",
+        "Microsoft.PowerShell"
+      ],
+      [
+        "wt",
+        "Microsoft.WindowsTerminal"
+      ],
+      [
         null,
         "ShareX.ShareX"
       ],
@@ -56,16 +69,8 @@
         "NAVER.Whale"
       ],
       [
-        "git",
-        "Microsoft.Git"
-      ],
-      [
         "gh",
         "GitHub.cli"
-      ],
-      [
-        "wt",
-        "Microsoft.WindowsTerminal"
       ],
       [
         "code",

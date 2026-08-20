@@ -5,7 +5,7 @@
   "telemetry.telemetryLevel": "off",
   "security.workspace.trust.enabled": false,
   "extensions.autoCheckUpdates": false,
-  "extensions.autoUpdate": false,
+  "extensions.autoUpdate": "off",
   // editor
   "editor.wordWrap": "bounded",
   "editor.tabSize": 2,
@@ -97,18 +97,13 @@
     "showCommandGroups": false,
     "showSingleEditorCursorMoves": true
   },
-  // inlayhints in TS/JS
+  // inlayhints in JS/TS
   "editor.inlayHints.fontSize": 11,
-  "typescript.inlayHints.enumMemberValues.enabled": true,
-  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "typescript.inlayHints.parameterTypes.enabled": true,
-  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
-  "typescript.inlayHints.parameterNames.enabled": "all",
-  "javascript.inlayHints.enumMemberValues.enabled": true,
-  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "javascript.inlayHints.parameterTypes.enabled": true,
-  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-  "javascript.inlayHints.parameterNames.enabled": "all",
+  "js/ts.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+  "js/ts.inlayHints.parameterTypes.enabled": true,
+  "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
+  "js/ts.inlayHints.parameterNames.enabled": "all",
   // intellisense
   "editor.inlineSuggest.enabled": true,
   "editor.inlineSuggest.suppressSuggestions": true,
@@ -152,13 +147,8 @@
     "**/react-router": true
   },
   // format
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.preferences.quoteStyle": "double",
-  "javascript.preferences.quoteStyle": "double",
-  "[css]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint"
-  },
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.preferences.quoteStyle": "double",
   // vsix
   "vsix.debug": true,
   "vsix.sources": {
@@ -189,8 +179,6 @@
     ],
     "formatter": [
       "ms:EditorConfig.EditorConfig",
-      "ms:dbaeumer.vscode-eslint",
-      "ms:stylelint.vscode-stylelint",
       "ms:meganrogge.template-string-converter"
     ],
     "debug": [

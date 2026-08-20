@@ -1,69 +1,81 @@
 $env:HOME = $env:USERPROFILE
 $env:USER = $env:USERNAME
 $env:DOTFILES = (Get-Item $PSScriptRoot).Parent.FullName
-[Environment]::SetEnvironmentVariable("HOME", "$env:HOME", "User")
-[Environment]::SetEnvironmentVariable("USER", "$env:USER", "User")
-[Environment]::SetEnvironmentVariable("DOTFILES", "$env:DOTFILES", "User")
+
+[Environment]::SetEnvironmentVariable("HOME", $env:HOME, "User")
+[Environment]::SetEnvironmentVariable("USER", $env:USER, "User")
+[Environment]::SetEnvironmentVariable("DOTFILES", $env:DOTFILES, "User")
 
 Import-Module (Join-Path $env:DOTFILES ".config\powershell\functions.psm1") -DisableNameChecking -Force
 
-$config = Get-Content -Path ".\setup\config.json" | ConvertFrom-Json
-
-foreach ($link in $config.symlinks) {
-  $source = (Join-Path $env:DOTFILES $link[0].Replace("/", "\"))
-  $destination = [Environment]::ExpandEnvironmentVariables($link[1].Replace("/", "\"))
-
-  Link-Path -Target $source -Path $destination
-}
+$configPath = Join-Path $PSScriptRoot "config.json"
+$config = Get-Content -Path $configPath -Raw | ConvertFrom-Json
 
 foreach ($bucket in $config.scoop.buckets) {
-  Invoke-Expression "scoop bucket add $($bucket[0]) $($bucket[1])" *>$null
+    & scoop bucket add $bucket[0] $bucket[1] *>$null
 }
 
-Invoke-Expression "scoop update" *>$null
+& scoop update *>$null
 
 foreach ($app in $config.scoop.apps) {
-  if (Test-App -App $app[0]) {
-    Write-Host "scoop: Updating $($app[1])..."
-    Invoke-Expression "scoop update $($app[1])" *>$null
-  } else {
-    Write-Host "scoop: Installing $($app[1])..."
-    Invoke-Expression "scoop install $($app[1])" *>$null
-  }
+    $appId = $app[0]
+    $appName = $app[1]
+    $postInstall = $app[2]
 
-  if (!([string]::IsNullOrWhiteSpace($app[2]))) {
-    Write-Host "scoop: Running post-install for $($app[1])..."
-    try {
-      Invoke-Expression $app[2] *>$null
+    if (Test-App -App $appId) {
+        Write-Host "scoop: '$appName' already installed, skipping..."
+    } else {
+        Write-Host "scoop: Installing '$appName'..."
+        & scoop install $appName *>$null
     }
-    catch {
-      Write-Warning "scoop: Post-install failed for $($app[1])"
-      Write-Error $_.Exception.Message
+
+    if (-not [string]::IsNullOrWhiteSpace($postInstall)) {
+        Write-Host "scoop: Running post-install for $appName..."
+        try {
+            $env:PATH = [Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User')
+            Invoke-Expression $postInstall *>$null
+        }
+        catch {
+            Write-Warning "scoop: Post-install failed for $appName"
+            Write-Error $_.Exception.Message
+        }
     }
-  }
 }
 
 foreach ($app in $config.winget.apps) {
-  if ([string]::IsNullOrWhiteSpace($app[0])) {
-    $app[0] = $app[1]
-  }
+    $appId = if ([string]::IsNullOrWhiteSpace($app[0])) { $app[1] } else { $app[0] }
+    $wingetId = $app[1]
+    $postInstall = $app[2]
+    $wingetArgs = @(
+        "--id", $wingetId,
+        "--exact",
+        "--silent",
+        "--accept-package-agreements",
+        "--accept-source-agreements"
+    )
 
-  if (Test-App -App $app[0]) {
-    Write-Host "winget: Updating $($app[1])..."
-    Invoke-Expression "winget upgrade $($app[1])" *>$null
-  } else {
-    Write-Host "winget: Installing $($app[1])..."
-    Invoke-Expression "winget install $($app[1])" *>$null
-  }
+    if (Test-App -App $appId) {
+        Write-Host "winget: '$wingetId' already installed, skipping..."
+    } else {
+        Write-Host "winget: Installing '$wingetId'..."
+        & winget install $wingetArgs *>$null
+    }
 
-  if (!([string]::IsNullOrWhiteSpace($app[2]))) {
-    Write-Host "winget: Running post-install for $($app[1])..."
-    try {
-      Invoke-Expression $app[2] *>$null
+    if (-not [string]::IsNullOrWhiteSpace($postInstall)) {
+        Write-Host "winget: Running post-install for $wingetId..."
+        try {
+            $env:PATH = [Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User')
+            Invoke-Expression $postInstall *>$null
+        }
+        catch {
+            Write-Warning "winget: Post-install failed for $wingetId"
+            Write-Error $_.Exception.Message
+        }
     }
-    catch {
-      Write-Warning "winget: Post-install failed for $($app[1])"
-      Write-Error $_.Exception.Message
-    }
-  }
+}
+
+foreach ($link in $config.symlinks) {
+    $source = Join-Path $env:DOTFILES $link[0].Replace("/", "\")
+    $destination = [Environment]::ExpandEnvironmentVariables($link[1].Replace("/", "\"))
+    Link-Path -Target $source -Path $destination
 }
