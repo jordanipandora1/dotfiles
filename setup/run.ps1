@@ -77,5 +77,14 @@ foreach ($app in $config.winget.apps) {
 foreach ($link in $config.symlinks) {
     $source = Join-Path $env:DOTFILES $link[0].Replace("/", "\")
     $destination = [Environment]::ExpandEnvironmentVariables($link[1].Replace("/", "\"))
+
+    if ((Test-Path $source) -and (($source.EndsWith(".json")) -or ($source.EndsWith(".jsonc")))) {
+      $content = Get-Content -Path $source -Raw
+      $content = [regex]::Replace($content, '(?i)[A-Z]:\\\\Users\\\\[^\\"]+', $env:USERPROFILE.Replace("\", "\\"))
+      $content = [regex]::Replace($content, '(?i)[A-Z]:/Users/[^/"]+', $env:USERPROFILE.Replace("\", "/"))
+
+      Set-Content -Path $source -Value $content -NoNewline
+    }
+
     Link-Path -Target $source -Path $destination
 }
