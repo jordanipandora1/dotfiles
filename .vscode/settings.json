@@ -30,6 +30,7 @@
   // git
   "git.autoStash": true,
   "git.autofetch": true,
+  "git.addAICoAuthor": "off",
   "git.allowForcePush": true,
   "git.closeDiffOnOperation": true,
   "git.confirmSync": false,
@@ -152,6 +153,9 @@
   // format
   "js/ts.updateImportsOnFileMove.enabled": "always",
   "js/ts.preferences.quoteStyle": "double",
+  // chat
+  "chat.useAgentSkills": true,
+  "chat.useNestedAgentsMdFiles": true,
   // vsix
   "vsix.debug": true,
   "vsix.sources": {
